@@ -10,7 +10,7 @@ from .models import User, Post
 def index(request):
 
     # Return all posts
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-date')
 
     return render(request, "network/index.html", {
         "posts": posts
