@@ -13,3 +13,12 @@
 	border-radius: 5px;
 	padding: 10px;
 }
+
+.post-username {
+	font-weight: bold;
+}
+
+.post-date {
+	float: right;
+	color: grey;
+}

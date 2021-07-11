@@ -12,7 +12,9 @@
 </div>
     {% for post in posts %}
         <div class="post">
-            {{ post.content }}
+            <span class="post-username">{{ post.user.username }}</span>
+            <span class="post-content">{{ post.content }}</span>
+            <span class="post-date">{{ post.date }}</span>
         </div>
     {% endfor %}
 {% endblock %}
