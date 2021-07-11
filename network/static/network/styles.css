@@ -1,0 +1,15 @@
+.post-form {
+	border-width: 1px;
+	border-style: solid;
+	border-color: lightgrey;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 10px;
+}
+
+.post {
+	margin: 10px;
+	border:  1px solid lightgrey;
+	border-radius: 5px;
+	padding: 10px;
+}
