@@ -61,3 +61,14 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def posts(request):
+    if request.method == "GET":
+
+        # Return all posts
+        posts = Post.objects.all()
+
+        return render(request, "network/posts.html", {
+            "posts": posts
+        })
