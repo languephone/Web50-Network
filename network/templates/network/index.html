@@ -1,9 +1,9 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <form>
+    <form action="{% url 'posts' %}" method="post">
         {% csrf_token %}
-        <input type="text" id="new-post">
+        <input type="text" name="post-text" id="new-post">
         <input type="submit" id="post-submit">
     </form>
 
