@@ -1,14 +1,17 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+<div class="post-form">
+    <h3>Create a new post</h3>
     <form action="{% url 'posts' %}" method="post">
         {% csrf_token %}
-        <input type="text" name="post-text" id="new-post">
-        <input type="submit" id="post-submit">
+        <textarea name="post-text" id="new-post" cols="40" rows="3"></textarea>
+        <br>
+        <input type="submit" id="post-submit" class="btn btn-primary">
     </form>
-
+</div>
     {% for post in posts %}
-        <div>
+        <div class="post">
             {{ post.content }}
         </div>
     {% endfor %}
