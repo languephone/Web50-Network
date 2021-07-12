@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -76,6 +77,7 @@ def posts(request):
         return HttpResponseRedirect(reverse("index"))
 
 
+@login_required(login_url='/login')
 def like(request):
     if request.method == "POST":
         related_post = Post.objects.get(pk=int(request.POST["post"]))
