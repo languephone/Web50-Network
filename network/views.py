@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Post
+from .models import User, Post, Like
 
 
 def index(request):
@@ -73,4 +73,12 @@ def posts(request):
     if request.method == "POST":
         new_post = Post(user=request.user, content=request.POST["post-text"])
         new_post.save()
+        return HttpResponseRedirect(reverse("index"))
+
+
+def like(request):
+    if request.method == "POST":
+        related_post = Post.objects.get(pk=int(request.POST["post"]))
+        new_like = Like(user=request.user, post=related_post)
+        new_like.save()
         return HttpResponseRedirect(reverse("index"))
