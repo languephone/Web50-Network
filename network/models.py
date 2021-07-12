@@ -14,6 +14,10 @@ class Post(models.Model):
     def __str__(self):
         return f"Post by {self.user.username}: '{self.content[:20]}...'"
 
+    def count_likes(self):
+        likes = len(Like.objects.filter(post=self.id))
+        return likes
+
 
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
