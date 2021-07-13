@@ -15,11 +15,12 @@
             <span class="post-username">{{ post.user.username }}</span>
             <span class="post-content">{{ post.content }}</span>
             <span class="post-date">{{ post.date }}</span>
-            <form action="{% url 'like' %}" method="post">
+            <form class="like-form" data-postid="{{ post.id }}">
                 {% csrf_token %}
                 <input type="hidden" name="post" value="{{ post.id }}">
-                <input type="submit" name="like" value="{{ post.count_likes }}" class="post-likes btn btn-primary btn-sm">
+                <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
             </form>
+            <span>{{ post.count_likes }}</span>
         </div>
     {% endfor %}
 {% endblock %}

@@ -1,9 +1,11 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Post, Like
 
@@ -77,10 +79,23 @@ def posts(request):
         return HttpResponseRedirect(reverse("index"))
 
 
+@csrf_exempt
 @login_required(login_url='/login')
 def like(request):
+    if request.method == "GET":
+        related_post = Post.objects.get(pk=int(request.GET["post"]))
+
+
     if request.method == "POST":
-        related_post = Post.objects.get(pk=int(request.POST["post"]))
+        print(f"Printing request: {request}")
+        print(f"Printing request.body: {request.body}")
+        data = json.loads(request.body)
+        print(f"Printing data: {data}")
+        post_id = data.get("post")
+        print(f"Printing post_id: {post_id}")
+        related_post = Post.objects.get(pk=int(post_id))
+        print(f"Printing related_post: {related_post}")
         new_like = Like(user=request.user, post=related_post)
+        print(f"Printing new_like: {new_like}")
         new_like.save()
-        return HttpResponseRedirect(reverse("index"))
+        return JsonResponse({"message": "Like saved successfully."}, status=201)
