@@ -20,10 +20,9 @@ function add_like(post) {
 		})
 	})
 	.then(response => {
-		response.json();
-		console.log(response);
+		return response.json()
 	})
-	// .then(data => {
-	// 	console.log(data);
-	// });
+	.then(data => {
+		console.log(data.message);
+	});
 }
