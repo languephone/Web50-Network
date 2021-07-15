@@ -11,19 +11,9 @@
         <input type="submit" id="post-submit" class="btn btn-primary">
     </form>
 </div>
-    {% for post in posts %}
-        <div class="post">
-            <span class="post-username">{{ post.user.username }}</span>
-            <span class="post-content">{{ post.content }}</span>
-            <span class="post-date">{{ post.date }}</span>
-            <form class="like-form" data-postid ="{{ post.id }}">
-                {% csrf_token %}
-                <input type="hidden" name="post" value="{{ post.id }}">
-                <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
-            </form>
-            <span>{{ post.count_likes }}</span>
-        </div>
-    {% endfor %}
+    <div class="posts">
+        
+    </div>
 {% endblock %}
 
 {% block script %}
