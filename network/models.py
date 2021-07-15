@@ -18,6 +18,14 @@ class Post(models.Model):
         likes = len(Like.objects.filter(post=self.id))
         return likes
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "user": self.user.username,
+            "date": self.date
+        }
+
 
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
