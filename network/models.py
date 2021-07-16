@@ -23,7 +23,8 @@ class Post(models.Model):
             "id": self.id,
             "content": self.content,
             "user": self.user.username,
-            "date": self.date
+            "date": self.date,
+            "likes": self.count_likes()
         }
 
 
