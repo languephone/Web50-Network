@@ -84,3 +84,14 @@ def like(request):
         new_like = Like(user=request.user, post=related_post)
         new_like.save()
         return HttpResponseRedirect(reverse("index"))
+
+
+def profile(request, username):
+
+    # Return all posts from user
+    posts = Post.objects.filter(user__username=username).order_by('-date')
+
+    return render(request, "network/profile.html", {
+        "posts": posts,
+        "username": username
+    })
