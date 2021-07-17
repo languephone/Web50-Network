@@ -26,3 +26,15 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.user.username} likes '{self.post.content[:25]}...'"
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE,
+        related_name="follower_username")
+    following = models.ManyToManyField(User, blank=True,
+        related_name="following_username")
+    date_added = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.follower.username}'s following list."
+
