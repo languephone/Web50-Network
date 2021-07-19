@@ -20,8 +20,8 @@ class Post(models.Model):
 
 
 class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ManyToManyField(Post, blank=True)
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
