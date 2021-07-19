@@ -25,7 +25,7 @@ class Like(models.Model):
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.username} likes '{self.post.content[:25]}...'"
+        return f"{self.user.username} likelist"
 
 
 class Follow(models.Model):
