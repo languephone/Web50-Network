@@ -33,6 +33,17 @@ class Post(models.Model):
             likelist.post.add(self)
 
 
+    def is_liked(self, user):
+        """Return true if post already liked by user."""
+
+        if Like.objects.filter(user=user).exists():
+            likelist = Like.objects.get(user=user)
+            return likelist.post.filter(post=self).exists()
+        else:
+            return False
+
+
+
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
