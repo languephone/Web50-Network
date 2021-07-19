@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Post, Like
+from .models import User, Post, Like, Follow
 
 
 def index(request):
@@ -90,8 +90,15 @@ def profile(request, username):
 
     # Return all posts from user
     posts = Post.objects.filter(user__username=username).order_by('-date')
+    
+    following_list = Follow.objects.get(follower__username=username).following.all()
+    following_count = len(following_list)
+    followers_list = Follow.objects.filter(following__username=username)
+    followers_count = len(followers_list)
 
     return render(request, "network/profile.html", {
         "posts": posts,
-        "username": username
+        "username": username,
+        "following_count": following_count,
+        "followers_count": followers_count
     })

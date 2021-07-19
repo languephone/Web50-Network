@@ -3,8 +3,8 @@
 {% block body %}
 <div class="post-form">
     <h5>User: {{ username }}</h5>
-    <h6>Followers: </h6>
-    <h6>Following: </h6>
+    <h6>Followers: {{ followers_count }}</h6>
+    <h6>Following: {{ following_count }}</h6>
 </div>
     {% for post in posts %}
         <div class="post">
