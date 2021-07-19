@@ -81,9 +81,7 @@ def posts(request):
 def like(request):
     if request.method == "POST":
         related_post = Post.objects.get(pk=int(request.POST["post"]))
-        new_like = Like(user=request.user)
-        new_like.save()
-        new_like.post.add(related_post)
+        related_post.toggle_like(request.user)
         return HttpResponseRedirect(reverse("index"))
 
 
