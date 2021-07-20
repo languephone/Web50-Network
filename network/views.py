@@ -96,6 +96,5 @@ def like(request):
         data = json.loads(request.body)
         post_id = data.get("post")
         related_post = Post.objects.get(pk=int(post_id))
-        new_like = Like(user=request.user, post=related_post)
-        new_like.save()
+        related_post.toggle_like(request.user)
         return JsonResponse({"message": "Like saved successfully."}, status=201)

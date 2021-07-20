@@ -19,16 +19,6 @@ class Post(models.Model):
         return likes
 
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "content": self.content,
-            "user": self.user.username,
-            "date": self.date,
-            "likes": self.count_likes()
-        }
-
-
     def toggle_like(self, user):
         # First check if likelist already exists for user, then add/remove post
         if Like.objects.filter(user=user).exists():
@@ -47,11 +37,17 @@ class Post(models.Model):
     def is_liked(self, user):
         """Return true if post already liked by user."""
 
-        if Like.objects.filter(user=user).exists():
-            likelist = Like.objects.get(user=user)
-            return likelist.post.filter(post=self).exists()
-        else:
-            return False
+        return Like.objects.filter(user=user).filter(post=self).exists()
+
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "user": self.user.username,
+            "date": self.date,
+            "likes": self.count_likes()
+        }
 
 
 class Like(models.Model):
@@ -73,4 +69,3 @@ class Follow(models.Model):
 
     def __str__(self):
         return f"{self.follower.username}'s following list."
-
