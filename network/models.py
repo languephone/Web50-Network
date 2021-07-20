@@ -18,7 +18,6 @@ class Post(models.Model):
         likes = len(Like.objects.filter(post=self.id))
         return likes
 
-
     def toggle_like(self, user):
         # First check if likelist already exists for user, then add/remove post
         if Like.objects.filter(user=user).exists():
@@ -33,12 +32,10 @@ class Post(models.Model):
             likelist.save()
             likelist.post.add(self)
 
-
     def is_liked(self, user):
         """Return true if post already liked by user."""
 
         return Like.objects.filter(user=user).filter(post=self).exists()
-
 
     def serialize(self):
         return {
@@ -54,7 +51,6 @@ class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ManyToManyField(Post, blank=True)
     date = models.DateTimeField(auto_now=True)
-
 
     def __str__(self):
         return f"{self.user.username} likelist"
