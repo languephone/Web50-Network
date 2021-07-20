@@ -19,22 +19,6 @@ class Post(models.Model):
         return likes
 
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "content": self.content,
-            "user": self.user.username,
-            "date": self.date,
-            "likes": self.count_likes()
-        }
-    
-
-    def is_liked(self, user):
-        """Return true if post already liked by user."""
-
-        return Like.objects.filter(user=user).filter(post=self).exists()
-
-
     def toggle_like(self, user):
         # First check if likelist already exists for user, then add/remove post
         if Like.objects.filter(user=user).exists():
@@ -48,6 +32,22 @@ class Post(models.Model):
             likelist = Like(user=user)
             likelist.save()
             likelist.post.add(self)
+
+
+    def is_liked(self, user):
+        """Return true if post already liked by user."""
+
+        return Like.objects.filter(user=user).filter(post=self).exists()
+
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "user": self.user.username,
+            "date": self.date,
+            "likes": self.count_likes()
+        }
 
 
 class Like(models.Model):
