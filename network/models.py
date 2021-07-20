@@ -18,6 +18,17 @@ class Post(models.Model):
         likes = len(Like.objects.filter(post=self.id))
         return likes
 
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "user": self.user.username,
+            "date": self.date,
+            "likes": self.count_likes()
+        }
+
+
     def toggle_like(self, user):
         # First check if likelist already exists for user, then add/remove post
         if Like.objects.filter(user=user).exists():
@@ -41,8 +52,6 @@ class Post(models.Model):
             return likelist.post.filter(post=self).exists()
         else:
             return False
-
-
 
 
 class Like(models.Model):
