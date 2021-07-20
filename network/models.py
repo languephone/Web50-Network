@@ -27,6 +27,12 @@ class Post(models.Model):
             "date": self.date,
             "likes": self.count_likes()
         }
+    
+
+    def is_liked(self, user):
+        """Return true if post already liked by user."""
+
+        return Like.objects.filter(user=user).filter(post=self).exists()
 
 
     def toggle_like(self, user):
@@ -42,16 +48,6 @@ class Post(models.Model):
             likelist = Like(user=user)
             likelist.save()
             likelist.post.add(self)
-
-
-    def is_liked(self, user):
-        """Return true if post already liked by user."""
-
-        if Like.objects.filter(user=user).exists():
-            likelist = Like.objects.get(user=user)
-            return likelist.post.filter(post=self).exists()
-        else:
-            return False
 
 
 class Like(models.Model):
@@ -73,4 +69,3 @@ class Follow(models.Model):
 
     def __str__(self):
         return f"{self.follower.username}'s following list."
-
