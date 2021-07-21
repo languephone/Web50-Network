@@ -95,6 +95,18 @@ def follow(request):
         return HttpResponseRedirect(reverse("profile", args=(following.username,)))
 
 
+@login_required(login_url='/login')
+def following(request):
+    # Return posts only from users the requester is following
+    following = Follow.objects.get(follower=request.user.id).following.all()
+    posts = Post.objects.filter(user__in=following).order_by('-date')
+
+    return render(request, "network/index.html", {
+        "posts": posts
+    })
+
+
+
 def profile(request, username):
 
     # Return all posts from user
