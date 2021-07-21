@@ -5,6 +5,11 @@
     <h5>User: {{ username }}</h5>
     <h6>Followers: {{ followers_count }}</h6>
     <h6>Following: {{ following_count }}</h6>
+    <form action="{% url 'follow' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="following" value="{{ username }}">
+        <input type="submit" name="follow" value="Follow" class="btn btn-primary btn-sm">
+    </form>
 </div>
     {% for post in posts %}
         <div class="post">
@@ -15,8 +20,9 @@
             <form action="{% url 'like' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="post" value="{{ post.id }}">
-                <input type="submit" name="like" value="{{ post.count_likes }}" class="post-likes btn btn-primary btn-sm">
+                <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
             </form>
+            <h6>Likes: {{ post.count_likes }}</h6>
         </div>
     {% endfor %}
 {% endblock %}

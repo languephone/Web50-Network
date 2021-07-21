@@ -19,8 +19,9 @@
             <form action="{% url 'like' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="post" value="{{ post.id }}">
-                <input type="submit" name="like" value="{{ post.count_likes }}" class="post-likes btn btn-primary btn-sm">
+                <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
             </form>
+            <h6>Likes: {{ post.count_likes }}</h6>
         </div>
     {% endfor %}
 {% endblock %}
