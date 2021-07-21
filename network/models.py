@@ -11,20 +11,20 @@ class User(AbstractUser):
             followlist = Follow.objects.get(follower=self.id)
             # Add user if not already in list
             if following not in followlist.following.all():
-                followlist.following.add(self)
+                followlist.following.add(following)
             # Remove user if already in list
             else:
-                followlist.following.remove(self)
+                followlist.following.remove(following)
         # If followlist for user doesn't exist, create one then add post to list
         else:
             followlist = Follow(follower=self)
             followlist.save()
             followlist.following.add(following)
 
-    def is_followed(self, user):
+    def is_followed(self, following):
         """Returns True/False if user is already followed"""
 
-        return Follow.objects.filter(follower=self).filter(following=user).exists()
+        return Follow.objects.filter(follower=self).filter(following=following).exists()
 
 
 
