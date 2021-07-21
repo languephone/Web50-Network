@@ -99,8 +99,11 @@ def profile(request, username):
 
     # Return all posts from user
     posts = Post.objects.filter(user__username=username).order_by('-date')
-    user = User.objects.get(username=username)
-    followed = request.user.is_followed(user)
+    profile = User.objects.get(username=username)
+    
+    # Logic for follow/unfollow/none button in profile.html
+    button = request.user.username != username
+    followed = request.user.is_followed(profile)
     
     following_list = Follow.objects.get(follower__username=username).following.all()
     following_count = len(following_list)
@@ -109,6 +112,7 @@ def profile(request, username):
 
     return render(request, "network/profile.html", {
         "posts": posts,
+        "button": button,
         "followed": followed,
         "username": username,
         "following_count": following_count,

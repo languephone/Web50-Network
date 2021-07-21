@@ -8,9 +8,10 @@
     <form action="{% url 'follow' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="following" value="{{ username }}">
-        {% if followed %}
+        
+        {% if button and followed %}
             <input type="submit" name="follow" value="Unfollow" class="btn btn-outline-primary btn-sm">
-        {% else %}
+        {% elif button and not followed %}
             <input type="submit" name="follow" value="Follow" class="btn btn-primary btn-sm">
         {% endif %}
         
