@@ -3,7 +3,26 @@ from django.db import models
 
 
 class User(AbstractUser):
-    pass
+    def toggle_follow(self, following):
+        """Adds or removes name to/from following list of user"""
+        
+        # First check if followlist already exists for follower
+        if Follow.objects.filter(follower=self).exists():
+            followlist = Follow.objects.get(follower=self.id)
+            # Add user if not already in list
+            if following not in followlist.following.all():
+                followlist.following.add(self)
+            # Remove user if already in list
+            else:
+                followlist.following.remove(self)
+        # If followlist for user doesn't exist, create one then add post to list
+        else:
+            followlist = Follow(follower=self)
+            followlist.save()
+            followlist.following.add(following)
+
+    # def is_followed(self):
+
 
 
 class Post(models.Model):

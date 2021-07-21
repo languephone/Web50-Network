@@ -85,10 +85,20 @@ def like(request):
         return HttpResponseRedirect(reverse("index"))
 
 
+@login_required(login_url='/login')
+def follow(request):
+    if request.method == "POST":
+        following = User.objects.get(username=request.POST["following"])
+        follower = request.user
+        follower.toggle_follow(following)
+        return HttpResponseRedirect(reverse("index"))
+
+
 def profile(request, username):
 
     # Return all posts from user
     posts = Post.objects.filter(user__username=username).order_by('-date')
+    user = User.objects.get(username=username)
     
     following_list = Follow.objects.get(follower__username=username).following.all()
     following_count = len(following_list)
@@ -97,6 +107,7 @@ def profile(request, username):
 
     return render(request, "network/profile.html", {
         "posts": posts,
+        "user": user,
         "username": username,
         "following_count": following_count,
         "followers_count": followers_count
