@@ -21,7 +21,10 @@ class User(AbstractUser):
             followlist.save()
             followlist.following.add(following)
 
-    # def is_followed(self):
+    def is_followed(self, user):
+        """Returns True/False if user is already followed"""
+
+        return Follow.objects.filter(follower=self).filter(following=user).exists()
 
 
 
