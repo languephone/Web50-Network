@@ -8,7 +8,12 @@
     <form action="{% url 'follow' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="following" value="{{ username }}">
-        <input type="submit" name="follow" value="Follow" class="btn btn-primary btn-sm">
+        {% if followed %}
+            <input type="submit" name="follow" value="Unfollow" class="btn btn-outline-primary btn-sm">
+        {% else %}
+            <input type="submit" name="follow" value="Follow" class="btn btn-primary btn-sm">
+        {% endif %}
+        
     </form>
 </div>
     {% for post in posts %}

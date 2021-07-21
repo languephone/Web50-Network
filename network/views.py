@@ -91,7 +91,8 @@ def follow(request):
         following = User.objects.get(username=request.POST["following"])
         follower = request.user
         follower.toggle_follow(following)
-        return HttpResponseRedirect(reverse("index"))
+        # Include comma after first argument to show it's a single item in tuple
+        return HttpResponseRedirect(reverse("profile", args=(following.username,)))
 
 
 def profile(request, username):
@@ -99,6 +100,7 @@ def profile(request, username):
     # Return all posts from user
     posts = Post.objects.filter(user__username=username).order_by('-date')
     user = User.objects.get(username=username)
+    followed = request.user.is_followed(user)
     
     following_list = Follow.objects.get(follower__username=username).following.all()
     following_count = len(following_list)
@@ -107,7 +109,7 @@ def profile(request, username):
 
     return render(request, "network/profile.html", {
         "posts": posts,
-        "user": user,
+        "followed": followed,
         "username": username,
         "following_count": following_count,
         "followers_count": followers_count
