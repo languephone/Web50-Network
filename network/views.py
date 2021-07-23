@@ -13,7 +13,7 @@ def index(request):
 
     # Return all posts
     posts = Post.objects.all().order_by('-date')
-    paginator = Paginator(posts, 10) # Show 10 posts per page
+    paginator = Paginator(posts, 5) # Show 10 posts per page
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -106,8 +106,13 @@ def following(request):
     following = Follow.objects.get(follower=request.user.id).following.all()
     posts = Post.objects.filter(user__in=following).order_by('-date')
 
+    # Following are required to create pagination
+    paginator = Paginator(posts, 5) # Show 10 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/index.html", {
-        "posts": posts
+        "page_obj": page_obj
     })
 
 
@@ -118,17 +123,22 @@ def profile(request, username):
     posts = Post.objects.filter(user__username=username).order_by('-date')
     profile = User.objects.get(username=username)
     
+    # Following are required to create pagination
+    paginator = Paginator(posts, 5) # Show 10 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     # Logic for follow/unfollow/none button in profile.html
     button = request.user.username != username
     followed = request.user.is_followed(profile)
-    
+
     following_list = Follow.objects.get(follower__username=username).following.all()
     following_count = len(following_list)
     followers_list = Follow.objects.filter(following__username=username)
     followers_count = len(followers_list)
 
     return render(request, "network/profile.html", {
-        "posts": posts,
+        "page_obj": page_obj,
         "button": button,
         "followed": followed,
         "username": username,

@@ -17,18 +17,35 @@
         
     </form>
 </div>
-    {% for post in posts %}
-        <div class="post">
-            <span class="post-username">
-                <a href="/{{ post.user.username }}">{{ post.user.username }}</a></span>
-            <span class="post-content">{{ post.content }}</span>
-            <span class="post-date">{{ post.date }}</span>
-            <form action="{% url 'like' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="post" value="{{ post.id }}">
-                <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
-            </form>
-            <h6>Likes: {{ post.count_likes }}</h6>
-        </div>
-    {% endfor %}
+{% for post in page_obj %}
+    <div class="post">
+        <span class="post-username">
+            <a href="/{{ post.user.username }}">{{ post.user.username }}</a></span>
+        <span class="post-content">{{ post.content }}</span>
+        <span class="post-date">{{ post.date }}</span>
+        <form action="{% url 'like' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="post" value="{{ post.id }}">
+            <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
+        </form>
+        <h6>Likes: {{ post.count_likes }}</h6>
+    </div>
+{% endfor %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
