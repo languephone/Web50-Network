@@ -8,15 +8,20 @@ from django.urls import reverse
 
 from .models import User, Post, Like, Follow
 
+def pagination(posts, request):
+    """Return page numbers and limit posts per page"""
+    paginator = Paginator(posts, 10) # Show 10 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return page_obj
+
 
 def index(request):
 
     # Return all posts
     posts = Post.objects.all().order_by('-date')
-    paginator = Paginator(posts, 5) # Show 10 posts per page
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = pagination(posts, request)
 
     return render(request, "network/index.html", {
         "page_obj": page_obj
@@ -105,11 +110,7 @@ def following(request):
     # Return posts only from users the requester is following
     following = Follow.objects.get(follower=request.user.id).following.all()
     posts = Post.objects.filter(user__in=following).order_by('-date')
-
-    # Following are required to create pagination
-    paginator = Paginator(posts, 5) # Show 10 posts per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = pagination(posts, request)
 
     return render(request, "network/index.html", {
         "page_obj": page_obj
@@ -122,11 +123,7 @@ def profile(request, username):
     # Return all posts from user
     posts = Post.objects.filter(user__username=username).order_by('-date')
     profile = User.objects.get(username=username)
-    
-    # Following are required to create pagination
-    paginator = Paginator(posts, 5) # Show 10 posts per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = pagination(posts, request)
 
     # Logic for follow/unfollow/none button in profile.html
     button = request.user.username != username
