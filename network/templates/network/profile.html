@@ -1,51 +1,52 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-<div class="post-form">
-    <h5>User: {{ username }}</h5>
-    <h6>Followers: {{ followers_count }}</h6>
-    <h6>Following: {{ following_count }}</h6>
-    <form action="{% url 'follow' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="following" value="{{ username }}">
-        
-        {% if button and followed %}
-            <input type="submit" name="follow" value="Unfollow" class="btn btn-outline-primary btn-sm">
-        {% elif button and not followed %}
-            <input type="submit" name="follow" value="Follow" class="btn btn-primary btn-sm">
-        {% endif %}
-        
-    </form>
-</div>
-{% for post in page_obj %}
-    <div class="post">
-        <span class="post-username">
-            <a href="/{{ post.user.username }}">{{ post.user.username }}</a></span>
-        <span class="post-content">{{ post.content }}</span>
-        <span class="post-date">{{ post.date }}</span>
-        <form action="{% url 'like' %}" method="post">
+    <div class="post-form">
+        <h5>User: {{ username }}</h5>
+        <h6>Followers: {{ followers_count }}</h6>
+        <h6>Following: {{ following_count }}</h6>
+        <form action="{% url 'follow' %}" method="post">
             {% csrf_token %}
-            <input type="hidden" name="post" value="{{ post.id }}">
-            <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
+            <input type="hidden" name="following" value="{{ username }}">
+            
+            {% if button and followed %}
+                <input type="submit" name="follow" value="Unfollow" class="btn btn-outline-primary btn-sm">
+            {% elif button and not followed %}
+                <input type="submit" name="follow" value="Follow" class="btn btn-primary btn-sm">
+            {% endif %}
+            
         </form>
-        <h6>Likes: {{ post.count_likes }}</h6>
     </div>
-{% endfor %}
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
+    {% for post in page_obj %}
+        <div class="post">
+            <span class="post-username">
+                <a href="/{{ post.user.username }}">{{ post.user.username }}</a></span>
+            <span class="post-content">{{ post.content }}</span>
+            <span class="post-date">{{ post.date }}</span>
+            <form action="{% url 'like' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="post" value="{{ post.id }}">
+                <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
+            </form>
+            <h6>Likes: {{ post.count_likes }}</h6>
+        </div>
+    {% endfor %}
+    <div class="page-number">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </div>
+    <div class="pagination">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a href="?page=1" class="page-link">&laquo; first</a></li>
+                <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link">previous</a></li>
+            {% endif %}
 
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-        </span>
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-    </span>
-</div>
+
+            {% if page_obj.has_next %}
+                <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link">next</a></li>
+                <li class="page-item"><a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">last &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
 {% endblock %}
