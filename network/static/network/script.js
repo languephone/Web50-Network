@@ -113,11 +113,17 @@ function display_posts() {
 
 function editPosts() {
 	document.querySelectorAll('.edit-likes').forEach(function(editButton) {
-		editButton.addEventListener('click', function() {
-			updatePost(editButton)
-		});
+		editButton.onclick = function() {
+			editPost(editButton.dataset.id);
+			
+			// After starting edit, change button to Submit rather than Edit
+			editButton.innerHTML = 'Submit'
+			editButton.onclick = function() {
+				updatePost(editButton);
+			}
+		}
 	});
-}
+};
 
 
 function updatePost(post) {
@@ -133,3 +139,22 @@ function updatePost(post) {
 		console.log(data);
 	});
 }
+
+
+function editPost(postId) {
+	
+	const postDiv = document.querySelector(`#post${postId}`);
+	const postSpan = document.querySelector(`#post${postId} .post-content`);
+	const postContent = postSpan.innerHTML;
+	
+	// Hide existing text
+	postSpan.style.display = 'none'
+
+	// Add new textarea element with existing text
+	const postEdit = document.createElement('textarea');
+	postEdit.innerHTML = postContent
+	postEdit.cols = 40
+	postEdit.rows = 3
+	postDiv.append(postEdit);
+
+};

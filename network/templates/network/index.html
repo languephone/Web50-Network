@@ -16,7 +16,7 @@
         </form>
     </div>
     {% for post in page_obj %}
-        <div class="post">
+        <div class="post" id="post{{ post.id }}">
             <span class="post-username">
                 <a href="/{{ post.user.username }}">{{ post.user.username }}</a></span>
             <span class="post-content">{{ post.content }}</span>
