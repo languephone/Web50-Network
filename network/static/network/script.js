@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-	display_posts();
+	// display_posts();
+	editPosts();
 
 	// Add 'onsubmit' property to like buttons
 	
@@ -106,6 +107,24 @@ function display_posts() {
 				return false;
 			};
 
+		});
+	});
+}
+
+function editPosts() {
+	document.querySelectorAll('.edit-likes').forEach(function(editButton) {
+		editButton.addEventListener('click', function {
+			fetch('/post', {
+				method: 'PUT',
+				body: JSON.stringify({
+					content: 'test content'
+					id: 1
+				});
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log(data);
+			});
 		});
 	});
 }
