@@ -86,6 +86,12 @@ def posts(request):
         new_post.save()
         return HttpResponseRedirect(reverse("index"))
 
+    elif request.method =="PUT":
+        post = Post.objects.get(pk=int(request.PUT["post"]))
+        post.content = request.PUT["post-text"]
+        post.save()
+
+
 
 @login_required(login_url='/login')
 def like(request):
