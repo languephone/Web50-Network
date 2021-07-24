@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -89,10 +90,12 @@ def posts(request):
         return HttpResponseRedirect(reverse("index"))
 
     elif request.method =="PUT":
-        # post = Post.objects.get(pk=int(request.PUT["post"]))
-        # post.content = request.PUT["post-text"]
+        data = json.loads(request.body)
+        post = Post.objects.get(pk=int(data['id']))
+        post.content = data['content']
         # post.save()
-        return JsonResponse('recieved', safe=False)
+        print(post.content)
+        return JsonResponse(post.content, safe=False)
 
 
 @login_required(login_url='/login')
