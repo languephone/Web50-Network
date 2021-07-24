@@ -23,7 +23,7 @@
             </form>
             <h6>Likes: {{ post.count_likes }}</h6>
             {% if request.user == post.user %}
-            <button class="post-likes btn btn-secondary btn-sm">Edit</button>
+            <button class="edit-likes btn btn-secondary btn-sm">Edit</button>
             {% endif %}
         </div>
     {% endfor %}
