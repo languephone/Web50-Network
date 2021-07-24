@@ -92,6 +92,12 @@ def posts(request):
     elif request.method =="PUT":
         data = json.loads(request.body)
         post = Post.objects.get(pk=int(data['id']))
+        
+        # ensure editor is the original poster
+        if request.user != post.user:
+            print("wrong user!")
+            return JsonResponse(json.dumps(f"You cannot edit {post.user}'s post."), safe=False)
+        
         post.content = data['content']
         post.save()
         return JsonResponse(post.content, safe=False)
