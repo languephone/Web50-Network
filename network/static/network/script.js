@@ -114,17 +114,22 @@ function display_posts() {
 function editPosts() {
 	document.querySelectorAll('.edit-likes').forEach(function(editButton) {
 		editButton.addEventListener('click', function() {
-			fetch('posts', {
-				method: 'PUT',
-				body: JSON.stringify({
-					content: editButton.dataset.content,
-					id: editButton.dataset.id
-				})
-			})
-			.then(response => response.json())
-			.then(data => {
-				console.log(data);
-			});
+			updatePost(editButton)
 		});
+	});
+}
+
+
+function updatePost(post) {
+	fetch('posts', {
+		method: 'PUT',
+		body: JSON.stringify({
+			content: post.dataset.content,
+			id: post.dataset.id
+		})
+	})
+	.then(response => response.json())
+	.then(data => {
+		console.log(data);
 	});
 }
