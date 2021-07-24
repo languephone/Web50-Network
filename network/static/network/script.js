@@ -113,15 +113,15 @@ function display_posts() {
 
 function editPosts() {
 	document.querySelectorAll('.edit-likes').forEach(function(editButton) {
-		editButton.addEventListener('click', function {
-			fetch('/post', {
+		editButton.addEventListener('click', function() {
+			fetch('posts', {
 				method: 'PUT',
 				body: JSON.stringify({
-					content: 'test content'
-					id: 1
-				});
+					content: 'test content',
+					id: '1'
+				})
 			})
-			.then(response => response.json())
+			.then(response => console.log(response))
 			.then(data => {
 				console.log(data);
 			});

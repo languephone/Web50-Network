@@ -2,9 +2,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Post, Like, Follow
 
@@ -80,6 +81,7 @@ def register(request):
         return render(request, "network/register.html")
 
 
+@csrf_exempt
 def posts(request):
     if request.method == "POST":
         new_post = Post(user=request.user, content=request.POST["post-text"])
@@ -87,10 +89,10 @@ def posts(request):
         return HttpResponseRedirect(reverse("index"))
 
     elif request.method =="PUT":
-        post = Post.objects.get(pk=int(request.PUT["post"]))
-        post.content = request.PUT["post-text"]
-        post.save()
-
+        # post = Post.objects.get(pk=int(request.PUT["post"]))
+        # post.content = request.PUT["post-text"]
+        # post.save()
+        return JsonResponse('recieved', safe=False)
 
 
 @login_required(login_url='/login')
