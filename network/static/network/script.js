@@ -117,8 +117,8 @@ function editPosts() {
 			fetch('posts', {
 				method: 'PUT',
 				body: JSON.stringify({
-					content: 'test content',
-					id: '1'
+					content: editButton.dataset.content,
+					id: editButton.dataset.id
 				})
 			})
 			.then(response => response.json())

@@ -21,14 +21,16 @@
                 <a href="/{{ post.user.username }}">{{ post.user.username }}</a></span>
             <span class="post-content">{{ post.content }}</span>
             <span class="post-date">{{ post.date }}</span>
+            <!-- Form to like posts -->
             <form action="{% url 'like' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="post" value="{{ post.id }}">
                 <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
             </form>
             <h6>Likes: {{ post.count_likes }}</h6>
+            <!-- Button to edit posts -->
             {% if request.user == post.user %}
-            <button class="edit-likes btn btn-secondary btn-sm">Edit</button>
+            <button class="edit-likes btn btn-secondary btn-sm" data-id="{{ post.id }}" data-content="{{ post.content }}">Edit</button>
             {% endif %}
         </div>
     {% endfor %}

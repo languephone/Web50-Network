@@ -93,8 +93,7 @@ def posts(request):
         data = json.loads(request.body)
         post = Post.objects.get(pk=int(data['id']))
         post.content = data['content']
-        # post.save()
-        print(post.content)
+        post.save()
         return JsonResponse(post.content, safe=False)
 
 
