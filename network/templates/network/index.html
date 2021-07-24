@@ -22,6 +22,13 @@
                 <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
             </form>
             <h6>Likes: {{ post.count_likes }}</h6>
+            {% if request.user == post.user %}
+            <form action="{% url 'like' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="post" value="{{ post.id }}">
+                <input type="submit" name="like" value="Edit" class="post-likes btn btn-secondary btn-sm">
+            {% endif %}
+            </form>
         </div>
     {% endfor %}
     <div class="page-number">
