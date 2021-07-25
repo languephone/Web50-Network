@@ -131,7 +131,9 @@ function updatePost(content, id) {
 	})
 	.then(response => response.json())
 	.then(data => {
-		console.log(data);
+		console.log(`Successfully updated post to '${data}'`);
+		postContent = document.querySelector(`#post${id} .post-content`);
+		postContent.innerHTML = data;
 	});
 }
 
@@ -170,12 +172,13 @@ function editPost(postId) {
 
 		const content = newInput.value;
 
-		// Replace textarea with span & new content
-		postSpan.innerHTML = content
-		postSpan.style.display = 'inline';
+		// Re-show edit link
 		postLink.style.display = 'inline';
 
 		// Call function to update sql
 		updatePost(content, postId);
+
+		// Prevent link from being followed
+		return false;
 	}
 };
