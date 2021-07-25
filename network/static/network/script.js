@@ -1,22 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-	// display_posts();
-	editPosts();
+	// Add event listeners for editing & liking posts
+	editPostsFunctionality();
+	likePostsFunctionality();
 
-	// Add 'onsubmit' property to like buttons
-	
-	// setTimeout(function() {
-	// 	document.querySelectorAll('.like-form').forEach(function(likeForm) {
-	// 		likeForm.onsubmit = function() {
-	// 			add_like(likeForm.dataset.postid);
-	// 			return false;
-	// 		};
-	// 	});
-	// }, 1000);
 });
 
 
-function add_like(post) {
+function updateLike(post) {
 	fetch('like', {
 		method: 'POST',
 		body: JSON.stringify({
@@ -111,14 +102,48 @@ function display_posts() {
 	});
 }
 
-function editPosts() {
+function editPostsFunctionality() {
 	document.querySelectorAll('.post-edit').forEach(link => {
 		link.onclick = function() {
 			editPost(link.dataset.id);
 			return false;
-		};
+		}
 	});
 };
+
+
+function likePostsFunctionality() {
+	document.querySelectorAll('.like-update').forEach(form => {
+		form.onsubmit = function() {
+			likePost(form.dataset.id);
+			return false;
+		}
+	});
+}
+
+
+function likePost(id) {
+	fetch('like', {
+		method: 'POST',
+		body: JSON.stringify({
+			id: id
+		})
+	})
+	.then(response => response.json())
+	.then(data => {
+		console.log(`Liked post ${id}.`);
+		
+		// Update like count and text of like button
+		const postLikes = document.querySelector(`#post${id} h6`);
+		postLikes.innerHTML = `Likes: ${data.current_likes}`;
+		const likeButton = document.querySelector(`#post${id} .post-likes`);
+		if (data.is_liked === true) {
+			likeButton.value = 'Unlike';
+		} else {
+			likeButton.value = 'Like';
+		}
+	});
+}
 
 
 function updatePost(content, id) {
@@ -132,7 +157,7 @@ function updatePost(content, id) {
 	.then(response => response.json())
 	.then(data => {
 		console.log(`Successfully updated post to '${data}'`);
-		postContent = document.querySelector(`#post${id} .post-content`);
+		const postContent = document.querySelector(`#post${id} .post-content`);
 		postContent.innerHTML = data;
 	});
 }

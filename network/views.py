@@ -91,7 +91,7 @@ def posts(request):
 
     elif request.method =="PUT":
         data = json.loads(request.body)
-        post = Post.objects.get(pk=int(data['id']))
+        post = Post.objects.get(pk=int(data["id"]))
         
         # ensure editor is the original poster
         if request.user != post.user:
@@ -103,12 +103,17 @@ def posts(request):
         return JsonResponse(post.content, safe=False)
 
 
+@csrf_exempt
 @login_required(login_url='/login')
 def like(request):
     if request.method == "POST":
-        related_post = Post.objects.get(pk=int(request.POST["post"]))
+        data = json.loads(request.body)
+        related_post = Post.objects.get(pk=int(data["id"]))
         related_post.toggle_like(request.user)
-        return HttpResponseRedirect(reverse("index"))
+        current_likes = related_post.count_likes()
+        is_liked = related_post.is_liked(request.user)
+        response = {'current_likes': current_likes, 'is_liked': is_liked}
+        return JsonResponse(response, safe=False)
 
 
 @login_required(login_url='/login')
