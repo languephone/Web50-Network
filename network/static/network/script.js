@@ -7,24 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-function updateLike(post) {
-	fetch('like', {
-		method: 'POST',
-		body: JSON.stringify({
-			post: post,
-			other: "foo",
-			bar: "baz"
-		})
-	})
-	.then(response => {
-		return response.json()
-	})
-	.then(data => {
-		console.log(data.message);
-	});
-}
-
-
 function get_posts() {
 	fetch('posts')
 	.then(response => {
