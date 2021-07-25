@@ -113,18 +113,10 @@ function display_posts() {
 
 function editPosts() {
 	document.querySelectorAll('.post-edit').forEach(link => {
-		link.addEventListener('click', function() {
+		link.onclick = function() {
 			editPost(link.dataset.id);
-			// link.parentElement.remove();
 			return false;
-		});
-	
-			// // After starting edit, change button to Submit rather than Edit
-			// editButton.innerHTML = 'Submit'
-			// editButton.onclick = function() {
-			// 	editButton.dataset.content = 
-			// 	updatePost(editButton);
-			// }
+		};
 	});
 };
 
@@ -146,66 +138,44 @@ function updatePost(content, id) {
 
 function editPost(postId) {
 	
-	const postDiv = document.querySelector(`#post${postId}`);
 	const postSpan = document.querySelector(`#post${postId} .post-content`);
 	const postLink = document.querySelector(`#post${postId} .post-edit`)
 	const postContent = postSpan.innerHTML;
 
-	// Add new form for editing text
-	// postSpan.innerHTML = `
-	// <form>
-	// 	<textarea cols="40" rows="3" name="new-content" value="${postContent}">${postContent}</textarea>
- //    	<input type="submit" name="submit" class="btn btn-secondary btn-sm">
- //    </form>`
-
     // Hide edit link to prevent double-editing
     postLink.style.display = 'none';
 
-	
-    // Code below refers to previous attempt which didn't use 'innerHTML' property
-	newForm = document.createElement('form');
+	// Create form to allow editing post
 	newInput = document.createElement('textarea');
-	newSubmit = document.createElement('input');
+	newSubmit = document.createElement('button');
 
 	// Style new elements
 	newInput.value = postContent;
 	newInput.cols = '40';
 	newInput.rows = '3';
 
-	newSubmit.type = 'submit';
-	newSubmit.id = 'edit-submit';
+	newSubmit.type = 'button';
+	newSubmit.innerHTML = 'Submit';
 	newSubmit.classList.add('btn');
 	newSubmit.classList.add('btn-secondary');
 	newSubmit.classList.add('btn-sm');
 
 	// Append form to existing div
 	postSpan.innerHTML = '';
-	newForm.append(newInput)
-	newForm.append(newSubmit);
-	postSpan.append(newForm);
+	postSpan.append(newInput)
+	postSpan.append(newSubmit);
 
 	// Add function to call when submitting form
-	newForm.onsubmit = function() {
+	newSubmit.onclick = function() {
 
 		const content = newInput.value;
 
 		// Replace textarea with span & new content
 		postSpan.innerHTML = content
-		
-		postLink.style.display = 'inline-block';
+		postSpan.style.display = 'inline';
+		postLink.style.display = 'inline';
 
 		// Call function to update sql
 		updatePost(content, postId);
-
-		return false;
 	}
 };
-
-
-function updatePostText(inputSpan, inputField) {
-	const content = inputField.innerHTML;
-	inputSpan.innerHTML = `
-
-	<a data-id="{{ post.id }}" class="post-edit" href="#">edit</a>
-	`
-}
