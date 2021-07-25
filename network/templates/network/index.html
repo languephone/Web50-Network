@@ -20,6 +20,9 @@
             <span class="post-username">
                 <a href="/{{ post.user.username }}">{{ post.user.username }}</a></span>
             <span class="post-content">{{ post.content }}</span>
+            {% if request.user == post.user %}
+                <a data-id="{{ post.id }}" class="post-edit" href="#">edit</a>
+            {% endif %}
             <span class="post-date">{{ post.date }}</span>
             <!-- Form to like posts -->
             <form action="{% url 'like' %}" method="post">
@@ -28,10 +31,11 @@
                 <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
             </form>
             <h6>Likes: {{ post.count_likes }}</h6>
-            <!-- Button to edit posts -->
-            {% if request.user == post.user %}
-            <button class="edit-likes btn btn-secondary btn-sm" data-id="{{ post.id }}" data-content="{{ post.content }}">Edit</button>
-            {% endif %}
+            <!-- Form to edit posts -->
+<!--             <form class="edit-post" id="form{{ post.id }}" style="display:none" data-content="{{ post.content }}">
+                <input type="textarea" name="new-content">
+                <input type="submit" name="edit" value="Edit" class="edit-likes btn btn-secondary btn-sm">
+            </form> -->
         </div>
     {% endfor %}
     <div class="page-number">
