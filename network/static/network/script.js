@@ -143,7 +143,8 @@ function likePost(id) {
 			likeButton.classList.add('btn-outline-primary')
 		} else {
 			likeButton.value = 'Like';
-
+			likeButton.classList.remove('btn-outline-primary')
+			likeButton.classList.add('btn-primary')
 		}
 	});
 }
