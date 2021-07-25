@@ -2,6 +2,11 @@ body {
 	background-color: #f5f7fa;
 }
 
+textarea {
+	vertical-align: top;
+	margin-right: 3px;
+}
+
 .post-form {
 	border-width: 1px;
 	border-style: solid;
