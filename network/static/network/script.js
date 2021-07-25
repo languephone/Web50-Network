@@ -139,8 +139,11 @@ function likePost(id) {
 		const likeButton = document.querySelector(`#post${id} .post-likes`);
 		if (data.is_liked === true) {
 			likeButton.value = 'Unlike';
+			likeButton.classList.remove('btn-primary')
+			likeButton.classList.add('btn-outline-primary')
 		} else {
 			likeButton.value = 'Like';
+
 		}
 	});
 }
