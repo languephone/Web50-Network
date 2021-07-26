@@ -25,15 +25,17 @@
             {% endif %}
             <span class="post-date">{{ post.date }}</span>
             <!-- Form to like posts -->
-            <form action="{% url 'like' %}" method="post" class="like-update" data-id="{{ post.id }}">
-                {% csrf_token %}
-                <input type="hidden" name="post" value="{{ post.id }}">
-                {% if post in like_list %}
-                    <input type="submit" name="like" value="Unlike" class="post-likes btn btn-outline-primary btn-sm">
-                {% else %}
-                    <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
-                {% endif %}
-            </form>
+            {% if request.user.is_authenticated %}
+                <form action="{% url 'like' %}" method="post" class="like-update" data-id="{{ post.id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="post" value="{{ post.id }}">
+                    {% if post in like_list %}
+                        <input type="submit" name="like" value="Unlike" class="post-likes btn btn-outline-primary btn-sm">
+                    {% else %}
+                        <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
+                    {% endif %}
+                </form>
+            {% endif %}
             <h6>Likes: {{ post.count_likes }}</h6>
         </div>
     {% endfor %}

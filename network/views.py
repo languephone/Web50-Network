@@ -27,8 +27,9 @@ def index(request):
     
     # Get list of user's liked posts (for logged-in users)
     like_list = []
-    if Like.objects.filter(user=request.user).exists():
-        like_list = Like.objects.get(user=request.user).post.all()
+    if request.user.is_authenticated:
+        if Like.objects.filter(user=request.user).exists():
+            like_list = Like.objects.get(user=request.user).post.all()
 
     return render(request, "network/index.html", {
         "page_obj": page_obj,
