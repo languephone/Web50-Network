@@ -24,9 +24,15 @@ def index(request):
     # Return all posts
     posts = Post.objects.all().order_by('-date')
     page_obj = pagination(posts, request)
+    
+    # Get list of user's liked posts (for logged-in users)
+    like_list = []
+    if Like.objects.filter(user=request.user).exists():
+        like_list = Like.objects.get(user=request.user).post.all()
 
     return render(request, "network/index.html", {
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "like_list": like_list
     })
 
 
