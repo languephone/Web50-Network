@@ -140,8 +140,15 @@ def following(request):
     posts = Post.objects.filter(user__in=following).order_by('-date')
     page_obj = pagination(posts, request)
 
+    # Get list of user's liked posts (for logged-in users)
+    like_list = []
+    if request.user.is_authenticated:
+        if Like.objects.filter(user=request.user).exists():
+            like_list = Like.objects.get(user=request.user).post.all()
+
     return render(request, "network/index.html", {
-        "page_obj": page_obj
+        "page_obj": page_obj,
+        "like_list": like_list
     })
 
 
@@ -153,9 +160,19 @@ def profile(request, username):
     profile = User.objects.get(username=username)
     page_obj = pagination(posts, request)
 
+    # Get list of user's liked posts (for logged-in users)
+    like_list = []
+    if request.user.is_authenticated:
+        if Like.objects.filter(user=request.user).exists():
+            like_list = Like.objects.get(user=request.user).post.all()
+
     # Logic for follow/unfollow/none button in profile.html
-    button = request.user.username != username
-    followed = request.user.is_followed(profile)
+    if request.user.is_authenticated:
+        button = request.user.username != username
+        followed = request.user.is_followed(profile)
+    else:
+        button = False
+        followed = False
 
     following_list = Follow.objects.get(follower__username=username).following.all()
     following_count = len(following_list)
@@ -168,5 +185,6 @@ def profile(request, username):
         "followed": followed,
         "username": username,
         "following_count": following_count,
-        "followers_count": followers_count
+        "followers_count": followers_count,
+        "like_list": like_list
     })

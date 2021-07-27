@@ -18,16 +18,26 @@
         </form>
     </div>
     {% for post in page_obj %}
-        <div class="post">
+        <div class="post" id="post{{ post.id }}">
             <span class="post-username">
                 <a href="/{{ post.user.username }}">{{ post.user.username }}</a></span>
             <span class="post-content">{{ post.content }}</span>
+            {% if request.user == post.user %}
+                <a data-id="{{ post.id }}" class="post-edit" href="#">edit</a>
+            {% endif %}
             <span class="post-date">{{ post.date }}</span>
-            <form action="{% url 'like' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="post" value="{{ post.id }}">
-                <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
-            </form>
+            <!-- Form to like posts -->
+            {% if request.user.is_authenticated %}
+                <form action="{% url 'like' %}" method="post" class="like-update" data-id="{{ post.id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="post" value="{{ post.id }}">
+                    {% if post in like_list %}
+                        <input type="submit" name="like" value="Unlike" class="post-likes btn btn-outline-primary btn-sm">
+                    {% else %}
+                        <input type="submit" name="like" value="Like" class="post-likes btn btn-primary btn-sm">
+                    {% endif %}
+                </form>
+            {% endif %}
             <h6>Likes: {{ post.count_likes }}</h6>
         </div>
     {% endfor %}
