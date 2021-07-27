@@ -92,9 +92,11 @@ def register(request):
 @csrf_exempt
 def posts(request):
     if request.method == "POST":
-        new_post = Post(user=request.user, content=request.POST["post-text"])
+        print(request.body)
+        data = json.loads(request.body)
+        new_post = Post(user=request.user, content=data["content"])
         new_post.save()
-        return HttpResponseRedirect(reverse("index"))
+        return JsonResponse(new_post.content, safe=False)
 
     elif request.method =="PUT":
         data = json.loads(request.body)
@@ -134,7 +136,6 @@ def follow(request):
         followers_count = following.count_followers()
         is_followed = follower.is_followed(following)
         response = {'followers_count': followers_count, 'is_followed': is_followed}
-        print(response)
         return JsonResponse(response, safe=False)
 
 

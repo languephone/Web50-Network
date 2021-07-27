@@ -1,22 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-	// Add event listeners for editing & liking posts
+	// Add event listeners for editing & liking posts, following users and creating posts
 	editPostsFunctionality();
 	likePostsFunctionality();
-	followUserFunctionality();
+	// followUserFunctionality();
+	createPostFunctionality();
 
 });
-
-
-function get_posts() {
-	fetch('posts')
-	.then(response => {
-		return response.json()
-	})
-	.then(data => {
-		console.log(data);
-	});
-}
 
 
 function display_posts() {
@@ -106,9 +96,17 @@ function likePostsFunctionality() {
 
 
 function followUserFunctionality() {
-	const formTarget = document.querySelector('.follow-update')
-	formTarget.onsubmit = function() {
-		followUser(formTarget.dataset.username);
+	document.querySelector('.follow-update').onsubmit = function() {
+		followUser(this.dataset.username);
+		return false;
+	}
+}
+
+
+function createPostFunctionality() {
+	document.querySelector('.post-form').onsubmit = function() {
+		const content = document.querySelector('textarea').value
+		createPost(content);
 		return false;
 	}
 }
@@ -139,6 +137,27 @@ function likePost(id) {
 			likeButton.classList.add('btn-primary')
 		}
 	});
+}
+
+
+function createPost(content) {
+	// Send post to server
+	console.log(content);
+	fetch('posts', {
+		method: 'POST',
+		body: JSON.stringify({
+			content: content
+		})
+	})
+	.then(response => response.json())
+	.then(data => {
+		console.log(`Added post '${data}`);
+	});
+
+	// Clear textarea for next post
+	document.querySelector('textarea').value = ''
+	// Create new DOM element for post
+
 }
 
 
