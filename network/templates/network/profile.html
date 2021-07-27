@@ -10,10 +10,8 @@
         <h5>User: {{ username }}</h5>
         <h6 id="followers">Followers: {{ followers_count }}</h6>
         <h6 id="following">Following: {{ following_count }}</h6>
-        <form action="{% url 'follow' %}" method="post" class="follow-update" data-username="{{ username }}">
-            {% csrf_token %}
+        <form class="follow-update" data-username="{{ username }}">
             <input type="hidden" name="following" value="{{ username }}">
-            
             {% if button and followed %}
                 <input type="submit" name="follow" value="Unfollow" class="btn btn-outline-primary btn-sm">
             {% elif button and not followed %}
