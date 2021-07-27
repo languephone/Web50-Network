@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Add event listeners for editing & liking posts
 	editPostsFunctionality();
 	likePostsFunctionality();
+	followUserFunctionality();
 
 });
 
@@ -104,6 +105,15 @@ function likePostsFunctionality() {
 }
 
 
+function followUserFunctionality() {
+	const formTarget = document.querySelector('.follow-update')
+	formTarget.onsubmit = function() {
+		followUser(formTarget.dataset.username);
+		return false;
+	}
+}
+
+
 function likePost(id) {
 	fetch('like', {
 		method: 'POST',
@@ -193,3 +203,31 @@ function editPost(postId) {
 		return false;
 	}
 };
+
+
+function followUser(username) {
+	fetch('follow', {
+		method: 'POST',
+		body: JSON.stringify({
+			username: username
+		})
+	})
+	.then(response => response.json())
+	.then(data => {
+		console.log(`Followed ${username}.`);
+		
+		// Update follower count and text of follow button
+		const followers = document.querySelector('#followers');
+		followers.innerHTML = `Followers: ${data.followers_count}`;
+		const followButton = document.querySelector('input[name=follow]');
+		if (data.is_followed === true) {
+			followButton.value = 'Unfollow';
+			followButton.classList.remove('btn-primary')
+			followButton.classList.add('btn-outline-primary')
+		} else {
+			followButton.value = 'Follow';
+			followButton.classList.remove('btn-outline-primary')
+			followButton.classList.add('btn-primary')
+		}
+	});
+}

@@ -128,11 +128,14 @@ def like(request):
 def follow(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        following = User.objects.get(username=data["following"])
+        following = User.objects.get(username=data["username"])
         follower = request.user
         follower.toggle_follow(following)
-        # Include comma after first argument to show it's a single item in tuple
-        return HttpResponseRedirect(reverse("profile", args=(following.username,)))
+        followers_count = following.count_followers()
+        is_followed = follower.is_followed(following)
+        response = {'followers_count': followers_count, 'is_followed': is_followed}
+        print(response)
+        return JsonResponse(response, safe=False)
 
 
 @login_required(login_url='/login')
