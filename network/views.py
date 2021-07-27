@@ -123,10 +123,12 @@ def like(request):
         return JsonResponse(response, safe=False)
 
 
+@csrf_exempt
 @login_required(login_url='/login')
 def follow(request):
     if request.method == "POST":
-        following = User.objects.get(username=request.POST["following"])
+        data = json.loads(request.body)
+        following = User.objects.get(username=data["following"])
         follower = request.user
         follower.toggle_follow(following)
         # Include comma after first argument to show it's a single item in tuple
@@ -174,10 +176,8 @@ def profile(request, username):
         button = False
         followed = False
 
-    following_list = Follow.objects.get(follower__username=username).following.all()
-    following_count = len(following_list)
-    followers_list = Follow.objects.filter(following__username=username)
-    followers_count = len(followers_list)
+    following_count = profile.count_following()
+    followers_count = profile.count_followers()
 
     return render(request, "network/profile.html", {
         "page_obj": page_obj,

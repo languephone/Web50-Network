@@ -26,6 +26,20 @@ class User(AbstractUser):
 
         return Follow.objects.filter(follower=self).filter(following=following).exists()
 
+    def count_followers(self):
+        """Returns number of followers."""
+
+        followers = len(Follow.objects.filter(following=self))
+        return followers
+
+    def count_following(self):
+        """Returns number of users current user is following."""
+
+        following = 0
+        if Follow.objects.filter(follower=self).exists():
+            following = len(Follow.objects.get(follower=self).following.all())
+        return following
+
 
 
 class Post(models.Model):
