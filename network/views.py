@@ -140,21 +140,27 @@ def follow(request):
 
 @login_required(login_url='/login')
 def following(request):
-    # Return posts only from users the requester is following
-    following = Follow.objects.get(follower=request.user.id).following.all()
-    posts = Post.objects.filter(user__in=following).order_by('-date')
-    page_obj = pagination(posts, request)
+    # Check if user is following anybody
+    if Follow.objects.filter(follower=request.user.id).exists():
 
-    # Get list of user's liked posts (for logged-in users)
-    like_list = []
-    if request.user.is_authenticated:
-        if Like.objects.filter(user=request.user).exists():
-            like_list = Like.objects.get(user=request.user).post.all()
+        # Return posts only from users the requester is following
+        following = Follow.objects.get(follower=request.user.id).following.all()
+        posts = Post.objects.filter(user__in=following).order_by('-date')
+        page_obj = pagination(posts, request)
 
-    return render(request, "network/index.html", {
-        "page_obj": page_obj,
-        "like_list": like_list
-    })
+        # Get list of user's liked posts (for logged-in users)
+        like_list = []
+        if request.user.is_authenticated:
+            if Like.objects.filter(user=request.user).exists():
+                like_list = Like.objects.get(user=request.user).post.all()
+
+        return render(request, "network/index.html", {
+            "page_obj": page_obj,
+            "like_list": like_list
+        })
+    else:
+        print("else path")
+        return HttpResponse("You are not following anybody.")
 
 
 
