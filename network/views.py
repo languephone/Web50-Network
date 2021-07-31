@@ -159,7 +159,6 @@ def following(request):
             "like_list": like_list
         })
     else:
-        print("else path")
         return HttpResponse("You are not following anybody.")
 
 
