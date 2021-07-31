@@ -89,6 +89,7 @@ def register(request):
         return render(request, "network/register.html")
 
 
+@login_required(login_url='/login')
 @csrf_exempt
 def posts(request):
     if request.method == "POST":
